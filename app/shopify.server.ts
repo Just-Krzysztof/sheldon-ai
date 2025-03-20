@@ -50,7 +50,8 @@ export async function addScriptTag(session) {
       // },
       script_tag: {
         event: "onload",
-        src: "https://sheldon-ai-ruby.vercel.app/embed.js"
+        // src: "https://sheldon-ai-ruby.vercel.app/embed.js"
+        src: "https://www.agent.sheldonai.net/embed.js"
       }
     },
   });

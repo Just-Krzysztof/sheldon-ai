@@ -1,0 +1,5 @@
+name = "Sheldon Chat Widget"
+type = "theme_app_extension"
+handle = "sheldon-chat-widget"
+[settings]
+enabled_on_install = true
