@@ -1,7 +1,7 @@
 # Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
 
 client_id = "6fbb230f05c5fd6a1c201d064009d279"
-application_url = "https://example.com/"
+application_url = "https://sheldon-ai-ruby.vercel.app/"
 embedded = true
 name = "SheldonAI"
 handle = "sheldonai"
@@ -38,7 +38,10 @@ api_version = "2025-01"
 scopes = "write_products"
 
 [auth]
-redirect_urls = [ "https://example.com/api/auth" ]
-
+redirect_urls = [
+  "https://sheldon-ai-ruby.vercel.app/auth/callback",
+  "https://sheldon-ai-ruby.vercel.app/auth/shopify/callback",
+  "https://sheldon-ai-ruby.vercel.app/api/auth/callback"
+]
 [pos]
 embedded = false

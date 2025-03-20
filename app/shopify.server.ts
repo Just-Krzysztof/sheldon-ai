@@ -44,10 +44,14 @@ export async function addScriptTag(session) {
   await client.post({
     path: "script_tags",
     data: {
+      // script_tag: {
+      //   event: "onload",
+      //   src: "https://agent.sheldonai.net/embed.js",
+      // },
       script_tag: {
         event: "onload",
-        src: "https://agent.sheldonai.net/embed.js",
-      },
+        src: "https://sheldon-ai-ruby.vercel.app/embed.js"
+      }
     },
   });
 }
