@@ -2,7 +2,8 @@ import pkg from "@prisma/client";
 const { PrismaClient } = pkg;
 
 declare global {
-  var prismaGlobal: PrismaClient;
+  // eslint-disable-next-line no-var
+  var prismaGlobal: PrismaClient | undefined;
 }
 
 if (process.env.NODE_ENV !== "production") {
