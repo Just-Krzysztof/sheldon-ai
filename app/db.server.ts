@@ -2,7 +2,7 @@ import pkg from "@prisma/client";
 const { PrismaClient } = pkg;
 
 declare global {
-  var prismaGlobal: typeof PrismaClient;
+  var prismaGlobal: PrismaClient;
 }
 
 if (process.env.NODE_ENV !== "production") {
