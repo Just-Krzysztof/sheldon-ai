@@ -45,26 +45,43 @@ const shopify = shopifyApp({
 
 export async function addScriptTagWithSession(session: Session) {
   try {
-    // Do zrobienia - używamy API Graphql
-    const response = await shopify.authenticate.admin({
-      session,
-    });
-
-    const client = response.admin.rest;
-
-    // Dodajemy script tag
-    const scriptTagResponse = await client.post({
-      path: 'script_tags',
-      data: {
-        script_tag: {
-          event: "onload",
-          src: "https://www.agent.sheldonai.net/embed.js"
+    // Używamy API GraphQL do dodania script tag
+    const adminApiResponse = await shopify.admin.graphql(
+      `
+      mutation scriptTagCreate($input: ScriptTagInput!) {
+        scriptTagCreate(input: $input) {
+          scriptTag {
+            id
+            src
+            displayScope
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+      `,
+      {
+        variables: {
+          input: {
+            src: "https://www.agent.sheldonai.net/embed.js",
+            displayScope: "ALL"
+          }
         }
       },
-    });
+      session // Przekazujemy sesję jako trzeci parametr
+    );
 
-    console.log("Script tag added successfully:", scriptTagResponse.body);
-    return scriptTagResponse.body;
+    const responseJson = await adminApiResponse.json();
+
+    if (responseJson.data?.scriptTagCreate?.userErrors?.length > 0) {
+      console.error("GraphQL errors:", responseJson.data.scriptTagCreate.userErrors);
+      throw new Error("Failed to create script tag");
+    }
+
+    console.log("Script tag added successfully:", responseJson.data?.scriptTagCreate?.scriptTag);
+    return responseJson.data?.scriptTagCreate?.scriptTag;
   } catch (error) {
     console.error("Error adding script tag:", error);
     throw error;
