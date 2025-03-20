@@ -45,15 +45,15 @@ const shopify = shopifyApp({
 
 export async function addScriptTagWithSession(session: Session) {
   try {
-    // Ponieważ użycie shopify.api.clients nie jest dostępne, musimy użyć admin API z authenticate
-    const response = await shopify.admin.rest.get({
+    // Do zrobienia - używamy API Graphql
+    const response = await shopify.authenticate.admin({
       session,
-      path: 'shop',
     });
 
-    // Dodajemy script tag bezpośrednio po pobraniu danych sklepu
-    const scriptTagResponse = await shopify.admin.rest.post({
-      session,
+    const client = response.admin.rest;
+
+    // Dodajemy script tag
+    const scriptTagResponse = await client.post({
       path: 'script_tags',
       data: {
         script_tag: {
