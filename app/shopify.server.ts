@@ -7,7 +7,8 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-import { RestClient } from "@shopify/shopify-api";
+import { shopifyApi } from "@shopify/shopify-api";
+import type { Session } from "@shopify/shopify-api";
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY,
@@ -38,23 +39,23 @@ const shopify = shopifyApp({
     : {}),
 });
 
-export async function addScriptTag(session) {
-  const client = new RestClient(session.shop, session.accessToken, ApiVersion.January25);
+export async function addScriptTag(session: Session) {
+  try {
+    const client = await shopify.api.clients.rest.admin(session);
 
-  await client.post({
-    path: "script_tags",
-    data: {
-      // script_tag: {
-      //   event: "onload",
-      //   src: "https://agent.sheldonai.net/embed.js",
-      // },
-      script_tag: {
-        event: "onload",
-        // src: "https://sheldon-ai-ruby.vercel.app/embed.js"
-        src: "https://www.agent.sheldonai.net/embed.js"
-      }
-    },
-  });
+    await client.post({
+      path: "script_tags",
+      data: {
+        script_tag: {
+          event: "onload",
+          src: "https://www.agent.sheldonai.net/embed.js"
+        }
+      },
+    });
+    console.log("Successfully added script tag");
+  } catch (error) {
+    console.error("Error adding script tag:", error);
+  }
 }
 
 export default shopify;

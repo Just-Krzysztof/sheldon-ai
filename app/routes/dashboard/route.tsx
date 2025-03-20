@@ -7,9 +7,14 @@ import {
   TextField,
   Layout,
   Page,
-  BlockStack,
-  // InlineStack
+  Box,
+  BlockStack
 } from "@shopify/polaris";
+
+interface SaveToShopifyParams {
+  agentId: string;
+  token: string;
+}
 
 export default function DashboardRoute() {
   const [email, setEmail] = useState('');
@@ -71,9 +76,9 @@ export default function DashboardRoute() {
     }
   };
 
-  const saveToShopify = async (agentId, token) => {
+  const saveToShopify = async (agentId: string, token: string) => {
     try {
-      await axios.post(saveMetafieldsUrl, { agentId, token });
+      await axios.post(saveMetafieldsUrl, { agentId, token } as SaveToShopifyParams);
     } catch (error) {
       alert("Saving metafields in Shopify failed");
     }
@@ -83,74 +88,86 @@ export default function DashboardRoute() {
     <Page>
       <Layout>
         <Layout.Section>
-          <BlockStack gap="400">
+          <BlockStack gap="4">
             {step === 1 && (
               <Card>
-                <BlockStack gap="400" padding="400">
-                  <Text as="h2" variant="headingMd">Register Your Account</Text>
-                  <TextField
-                    label="Email"
-                    type="email"
-                    value={email}
-                    onChange={setEmail}
-                    autoComplete="email"
-                  />
-                  <TextField
-                    label="Password"
-                    type="password"
-                    value={password}
-                    onChange={setPassword}
-                    autoComplete="current-password"
-                  />
-                  <Button onClick={registerUser} primary>Register</Button>
-                </BlockStack>
+                <Box padding="4">
+                  <BlockStack gap="4">
+                    <Text as="h2" variant="headingMd">Register Your Account</Text>
+                    <TextField
+                      label="Email"
+                      type="email"
+                      value={email}
+                      onChange={setEmail}
+                      autoComplete="email"
+                    />
+                    <TextField
+                      label="Password"
+                      type="password"
+                      value={password}
+                      onChange={setPassword}
+                      autoComplete="current-password"
+                    />
+                    <Button onClick={registerUser} variant="primary">Register</Button>
+                  </BlockStack>
+                </Box>
               </Card>
             )}
 
             {step === 2 && (
               <Card>
-                <BlockStack gap="400" padding="400">
-                  <Text as="h2" variant="headingMd">Login</Text>
-                  <Button onClick={loginUser} primary>Login with provided credentials</Button>
-                </BlockStack>
+                <Box padding="4">
+                  <BlockStack gap="4">
+                    <Text as="h2" variant="headingMd">Login</Text>
+                    <Button onClick={loginUser} variant="primary">Login with provided credentials</Button>
+                  </BlockStack>
+                </Box>
               </Card>
             )}
 
             {step === 3 && (
               <Card>
-                <BlockStack gap="400" padding="400">
-                  <Text as="h2" variant="headingMd">Create Your Company</Text>
-                  <TextField
-                    label="Company Name"
-                    value={companyName}
-                    onChange={setCompanyName}
-                  />
-                  <Button onClick={createCompany} primary>Create Company</Button>
-                </BlockStack>
+                <Box padding="4">
+                  <BlockStack gap="4">
+                    <Text as="h2" variant="headingMd">Create Your Company</Text>
+                    <TextField
+                      label="Company Name"
+                      value={companyName}
+                      onChange={setCompanyName}
+                      autoComplete="off"
+                    />
+                    <Button onClick={createCompany} variant="primary">Create Company</Button>
+                  </BlockStack>
+                </Box>
               </Card>
             )}
 
             {step === 4 && (
               <Card>
-                <BlockStack gap="400" padding="400">
-                  <Text as="h2" variant="headingMd">Create Your Agent</Text>
-                  <TextField
-                    label="Agent Name"
-                    value={agentName}
-                    onChange={setAgentName}
-                  />
-                  <Button onClick={createAgent} primary>Create Agent</Button>
-                </BlockStack>
+                <Box padding="4">
+                  <BlockStack gap="4">
+                    <Text as="h2" variant="headingMd">Create Your Agent</Text>
+                    <TextField
+                      label="Agent Name"
+                      value={agentName}
+                      onChange={setAgentName}
+                      autoComplete="off"
+                    />
+                    <Button onClick={createAgent} variant="primary">Create Agent</Button>
+                  </BlockStack>
+                </Box>
               </Card>
             )}
 
             {step === 5 && (
               <Card>
-                <BlockStack gap="400" padding="400" align="center">
-                  <Text as="h2" variant="headingMd">✅ Agent Created & Saved!</Text>
-                  <Text>Agent ID: {agentId}</Text>
-                  <Text>You can now start using the chatbox on your store!</Text>
-                </BlockStack>
+                <Box padding="4">
+                  <BlockStack gap="4" align="center">
+                    <Text as="h2" variant="headingMd">✅ Agent Created & Saved!</Text>
+                    <Text as="p" variant="bodyMd">Agent ID: {agentId}</Text>
+                    <Text as="p" variant="bodyMd">You can now start using the chatbox on your store!</Text>
+                  </BlockStack>
+                </Box>
               </Card>
             )}
           </BlockStack>
