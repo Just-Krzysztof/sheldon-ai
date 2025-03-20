@@ -9,17 +9,20 @@ import { authenticate } from "../shopify.server";
 
 export const links = () => [{ rel: "stylesheet", href: polarisStyles }];
 
-export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await authenticate.admin(request);
+export async function loader({ request }: LoaderFunctionArgs) {
+  const { admin, session } = await authenticate.admin(request);
 
-  return { apiKey: process.env.SHOPIFY_API_KEY || "" };
-};
+  return {
+    apiKey: process.env.SHOPIFY_API_KEY || "",
+    shopOrigin: session.shop
+  };
+}
 
 export default function App() {
-  const { apiKey } = useLoaderData<typeof loader>();
+  const { apiKey, shopOrigin } = useLoaderData<typeof loader>();
 
   return (
-    <AppProvider isEmbeddedApp apiKey={apiKey}>
+    <AppProvider isEmbeddedApp apiKey={apiKey} shopOrigin={shopOrigin}>
       <NavMenu>
         <Link to="/app/dashboard" rel="home">
           Dashboard

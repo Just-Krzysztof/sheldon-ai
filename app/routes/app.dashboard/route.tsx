@@ -10,10 +10,18 @@ import {
   Box,
   BlockStack
 } from "@shopify/polaris";
+import { authenticate } from "../../shopify.server";
+import type { LoaderFunctionArgs } from '@remix-run/node';
+import { TitleBar } from '@shopify/app-bridge-react';
 
 interface SaveToShopifyParams {
   agentId: string;
   token: string;
+}
+
+export async function loader({ request }: LoaderFunctionArgs) {
+  await authenticate.admin(request);
+  return null;
 }
 
 export default function DashboardRoute() {
@@ -86,13 +94,14 @@ export default function DashboardRoute() {
 
   return (
     <Page>
+      <TitleBar title="SheldonAI Dashboard" />
       <Layout>
         <Layout.Section>
-          <BlockStack gap="4">
+          <BlockStack gap={4}>
             {step === 1 && (
               <Card>
-                <Box padding="4">
-                  <BlockStack gap="4">
+                <Box padding={4}>
+                  <BlockStack gap={4}>
                     <Text as="h2" variant="headingMd">Register Your Account</Text>
                     <TextField
                       label="Email"
@@ -116,8 +125,8 @@ export default function DashboardRoute() {
 
             {step === 2 && (
               <Card>
-                <Box padding="4">
-                  <BlockStack gap="4">
+                <Box padding={4}>
+                  <BlockStack gap={4}>
                     <Text as="h2" variant="headingMd">Login</Text>
                     <Button onClick={loginUser} variant="primary">Login with provided credentials</Button>
                   </BlockStack>
@@ -127,8 +136,8 @@ export default function DashboardRoute() {
 
             {step === 3 && (
               <Card>
-                <Box padding="4">
-                  <BlockStack gap="4">
+                <Box padding={4}>
+                  <BlockStack gap={4}>
                     <Text as="h2" variant="headingMd">Create Your Company</Text>
                     <TextField
                       label="Company Name"
@@ -144,8 +153,8 @@ export default function DashboardRoute() {
 
             {step === 4 && (
               <Card>
-                <Box padding="4">
-                  <BlockStack gap="4">
+                <Box padding={4}>
+                  <BlockStack gap={4}>
                     <Text as="h2" variant="headingMd">Create Your Agent</Text>
                     <TextField
                       label="Agent Name"
@@ -161,8 +170,8 @@ export default function DashboardRoute() {
 
             {step === 5 && (
               <Card>
-                <Box padding="4">
-                  <BlockStack gap="4" align="center">
+                <Box padding={4}>
+                  <BlockStack gap={4} align="center">
                     <Text as="h2" variant="headingMd">✅ Agent Created & Saved!</Text>
                     <Text as="p" variant="bodyMd">Agent ID: {agentId}</Text>
                     <Text as="p" variant="bodyMd">You can now start using the chatbox on your store!</Text>

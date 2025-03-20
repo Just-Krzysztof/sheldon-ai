@@ -45,9 +45,13 @@ const shopify = shopifyApp({
 
 export async function addScriptTagWithSession(session: Session) {
   try {
-    // Używamy API GraphQL do dodania script tag
-    const adminApiResponse = await shopify.admin.graphql(
-      `
+    // Używamy authenticate.admin zamiast bezpośredniego dostępu do admin
+    const { admin } = await shopify.authenticate.admin({
+      session
+    });
+
+    // Teraz używamy admin.graphql
+    const response = await admin.graphql(`
       mutation scriptTagCreate($input: ScriptTagInput!) {
         scriptTagCreate(input: $input) {
           scriptTag {
@@ -61,19 +65,16 @@ export async function addScriptTagWithSession(session: Session) {
           }
         }
       }
-      `,
-      {
-        variables: {
-          input: {
-            src: "https://www.agent.sheldonai.net/embed.js",
-            displayScope: "ALL"
-          }
+    `, {
+      variables: {
+        input: {
+          src: "https://www.agent.sheldonai.net/embed.js",
+          displayScope: "ALL"
         }
-      },
-      session // Przekazujemy sesję jako trzeci parametr
-    );
+      }
+    });
 
-    const responseJson = await adminApiResponse.json();
+    const responseJson = await response.json();
 
     if (responseJson.data?.scriptTagCreate?.userErrors?.length > 0) {
       console.error("GraphQL errors:", responseJson.data.scriptTagCreate.userErrors);
