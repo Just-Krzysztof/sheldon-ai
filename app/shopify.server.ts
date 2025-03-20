@@ -7,7 +7,6 @@ import {
 } from "@shopify/shopify-app-remix/server";
 import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
 import prisma from "./db.server";
-import { shopifyApi } from "@shopify/shopify-api";
 import type { Session } from "@shopify/shopify-api";
 
 const shopify = shopifyApp({
@@ -31,7 +30,12 @@ const shopify = shopifyApp({
   },
   hooks: {
     afterAuth: async ({ session }) => {
-      await addScriptTag(session);
+      try {
+        await addScriptTagWithSession(session);
+        console.log("Script tag added after authentication");
+      } catch (error) {
+        console.error("Error in afterAuth hook:", error);
+      }
     },
   },
   ...(process.env.SHOP_CUSTOM_DOMAIN
@@ -39,12 +43,18 @@ const shopify = shopifyApp({
     : {}),
 });
 
-export async function addScriptTag(session: Session) {
+export async function addScriptTagWithSession(session: Session) {
   try {
-    const client = await shopify.api.clients.rest.admin(session);
+    // Ponieważ użycie shopify.api.clients nie jest dostępne, musimy użyć admin API z authenticate
+    const response = await shopify.admin.rest.get({
+      session,
+      path: 'shop',
+    });
 
-    await client.post({
-      path: "script_tags",
+    // Dodajemy script tag bezpośrednio po pobraniu danych sklepu
+    const scriptTagResponse = await shopify.admin.rest.post({
+      session,
+      path: 'script_tags',
       data: {
         script_tag: {
           event: "onload",
@@ -52,9 +62,12 @@ export async function addScriptTag(session: Session) {
         }
       },
     });
-    console.log("Successfully added script tag");
+
+    console.log("Script tag added successfully:", scriptTagResponse.body);
+    return scriptTagResponse.body;
   } catch (error) {
     console.error("Error adding script tag:", error);
+    throw error;
   }
 }
 

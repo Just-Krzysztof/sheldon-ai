@@ -24,7 +24,10 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       }
 
       // Zapisz metafields dla sklepu
-      console.log("Attempting to save metafields for shop:", admin.shop.id);
+      console.log("Attempting to save metafields");
+
+      const shopId = await getShopId(admin);
+      console.log("Got shop ID:", shopId);
 
       const response = await admin.graphql(`
         mutation metafieldsSet($metafields: [MetafieldsSetInput!]!) {
@@ -49,14 +52,14 @@ export const action = async ({ request }: ActionFunctionArgs) => {
             {
               namespace: "sheldon_ai",
               key: "agent_id",
-              ownerId: "gid://shopify/Shop/" + admin.shop.id,
+              ownerId: `gid://shopify/Shop/${shopId}`,
               type: "single_line_text_field",
               value: agentId
             },
             {
               namespace: "sheldon_ai",
               key: "agent_token",
-              ownerId: "gid://shopify/Shop/" + admin.shop.id,
+              ownerId: `gid://shopify/Shop/${shopId}`,
               type: "single_line_text_field",
               value: token
             }
@@ -78,14 +81,31 @@ export const action = async ({ request }: ActionFunctionArgs) => {
       console.log("Metafields saved successfully");
       return json({ success: true });
     } catch (parseError) {
-      console.error("Error parsing request body:", parseError);
-      return json({ error: "Invalid request body" }, { status: 400 });
+      console.error("Error parsing request body or processing data:", parseError);
+      return json({ error: "Error processing request", details: String(parseError) }, { status: 400 });
     }
-  } catch (authError) {
-    console.error("Authentication error:", authError);
-    return json({ error: "Authentication failed" }, { status: 401 });
   } catch (error) {
-    console.error("Unexpected error saving metafields:", error);
-    return json({ error: "Failed to save metafields", details: String(error) }, { status: 500 });
+    console.error("Unexpected error:", error);
+    return json({ error: "Server error", details: String(error) }, { status: 500 });
   }
 };
+
+// Helper function to get shop ID using session
+async function getShopId(admin: any): Promise<string> {
+  try {
+    const response = await admin.graphql(`
+      {
+        shop {
+          id
+        }
+      }
+    `);
+
+    const responseJson = await response.json();
+    const shopId = responseJson.data.shop.id.replace('gid://shopify/Shop/', '');
+    return shopId;
+  } catch (error) {
+    console.error("Error getting shop ID:", error);
+    throw new Error("Could not get shop ID");
+  }
+}
