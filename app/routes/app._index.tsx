@@ -7,4 +7,4 @@ export async function loader({ request }: LoaderFunctionArgs) {
 
   // Przekierowanie na dashboard jako główną stronę
   return redirect("/app/dashboard");
-};
+}
