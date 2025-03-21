@@ -22,9 +22,9 @@ export default function App() {
   return (
     <div className={styles.index}>
       <div className={styles.content}>
-        <h1 className={styles.heading}>A short heading about [your app]</h1>
+        <h1 className={styles.heading}>Sheldon AI Assistant</h1>
         <p className={styles.text}>
-          A tagline about [your app] that describes your value proposition.
+          Inteligentny asystent AI dla Twojego sklepu Shopify, który pomaga klientom znaleźć odpowiednie produkty.
         </p>
         {showForm && (
           <Form className={styles.form} method="post" action="/auth/login">
@@ -38,18 +38,26 @@ export default function App() {
             </button>
           </Form>
         )}
+        <h2 className={styles.heading}>Jak dodać widget do swojej strony?</h2>
+        <div className={styles.codeExample}>
+          <code>
+            {`<script
+  src="https://www.agent.sheldonai.net/embed.js"
+  data-agent-id="your-agent-id"
+  data-shop-url="your-shop-url"
+  data-position="bottom-right">
+</script>`}
+          </code>
+        </div>
         <ul className={styles.list}>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Inteligentny asystent</strong>. Pomaga klientom znaleźć odpowiednie produkty w Twoim sklepie.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Łatwy w integracji</strong>. Wystarczy dodać jeden skrypt do Twojej strony.
           </li>
           <li>
-            <strong>Product feature</strong>. Some detail about your feature and
-            its benefit to your customer.
+            <strong>Pełna personalizacja</strong>. Dostosuj wygląd i zachowanie asystenta do swojego sklepu.
           </li>
         </ul>
       </div>

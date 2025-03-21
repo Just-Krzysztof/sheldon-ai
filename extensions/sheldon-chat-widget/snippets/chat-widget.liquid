@@ -1,0 +1,16 @@
+{% comment %}
+  Chat widget for Sheldon AI
+  Auto-injects the chat widget code into the theme
+{% endcomment %}
+
+<script>
+  (function() {
+    const script = document.createElement('script');
+    script.src = 'https://agent.sheldonai.net/embed.js';
+    script.setAttribute('data-agent-id', '{{ metafields.sheldon_ai.agent_id }}');
+    script.setAttribute('data-shop-token', '{{ metafields.sheldon_ai.token }}');
+    script.setAttribute('data-shop-url', '{{ shop.secure_url }}');
+    script.setAttribute('data-position', 'bottom-right');
+    document.body.appendChild(script);
+  })();
+</script>

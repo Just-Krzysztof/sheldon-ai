@@ -1,0 +1,6 @@
+{
+  "buildCommand": "pnpm prisma generate && pnpm prisma migrate deploy && pnpm remix vite:build",
+  "installCommand": "pnpm install",
+  "outputDirectory": "build/client",
+  "framework": "remix"
+}

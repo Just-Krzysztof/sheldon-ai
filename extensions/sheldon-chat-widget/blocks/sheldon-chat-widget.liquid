@@ -1,12 +1,11 @@
- <script
-        src="https://www.agent.sheldonai.net/embed.js"
-        data-api-endpoint="https://sheldon-ai-f0ad075692ae.herokuapp.com/agent/message"
-        data-agent-id="{{ shop.agentid }}"
-        data-shop-url="{{ shop.url }}"
-        data-shop-token="{{ shop.metafields.sheldonai.token }}"
-        data-position="{{ settings.position }}"
-        defer
-        ></script>
+<script
+  src="https://agent.sheldonai.net/embed.js"
+  data-agent-id="{{ shop.metafields.sheldon_ai.agent_id }}"
+  data-shop-url="{{ shop.secure_url }}"
+  data-shop-token="{{ shop.metafields.sheldon_ai.agent_token }}"
+  data-position="{{ block.settings.position }}"
+  defer
+></script>
 
 {% schema %}
 {

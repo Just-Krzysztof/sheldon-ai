@@ -71,3 +71,17 @@
     padding-bottom: 1rem;
   }
 }
+
+.codeExample {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+.codeExample code {
+  font-family: monospace;
+  font-size: 14px;
+  white-space: pre;
+}
